@@ -2,13 +2,18 @@ import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 
 export async function middleware(req: NextRequest) {
-  console.log('middleware is running');
   const res = NextResponse.next();
 
   const user = req.cookies.get('user')?.value;
 
   if (!user) {
-    return NextResponse.redirect(`${process.env.SERVICE_URL}/sign-in`);
+    return NextResponse.redirect(
+      `${
+        process.env.NODE_ENV === 'production'
+          ? process.env.SERVICE_URL_1
+          : process.env.SERVICE_URL_2
+      }/sign-in`
+    );
   }
   return res;
 }
