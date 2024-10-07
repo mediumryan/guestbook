@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 export default function ModifyContentHeader({
   registered_person_name,
   userName,
@@ -23,12 +21,24 @@ export default function ModifyContentHeader({
         </div>
         <span className="text-sm mt-2">{registered_person_name}</span>
       </div>
-      <button
-        type="submit"
-        className="bg-slate-700 text-white px-4 py-2 mx-1 rounded-md hover:opacity-75"
-      >
-        SUBMIT
-      </button>
+      <div>
+        <button
+          type="submit"
+          name="btn"
+          value="delete"
+          className="bg-slate-700 text-white px-4 py-2 mx-1 rounded-md hover:opacity-75"
+        >
+          DELETE
+        </button>
+        <button
+          type="submit"
+          name="btn"
+          value="modify"
+          className="bg-slate-700 text-white px-4 py-2 mx-1 rounded-md hover:opacity-75"
+        >
+          SUBMIT
+        </button>
+      </div>
     </div>
   );
 }

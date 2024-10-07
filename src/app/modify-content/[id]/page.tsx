@@ -26,7 +26,12 @@ export default async function ModifyContentPage({
 
   return (
     <div className="flex flex-col w-3/4 mx-auto mt-12">
-      <ModifyContent content={content} userId={userId} userName={userName} />
+      <ModifyContent
+        id={params.id}
+        content={content}
+        userId={userId}
+        userName={userName}
+      />
       {/* <AddContentForm userId={userId} userName={userName} /> */}
     </div>
   );
