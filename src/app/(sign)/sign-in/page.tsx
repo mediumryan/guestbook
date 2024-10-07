@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Cookie from 'js-cookie';
 // types
 import { UserType } from '@/type/types';
 // actions
@@ -18,6 +19,8 @@ export default function SignInPage() {
   const [errorMessage, setErrorMessage] = useState<any>(null);
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+
+  const user = Cookie.get('user');
 
   async function getUser(user: UserType) {
     const res = await fetch('/api/getUserInfo', {
@@ -43,6 +46,12 @@ export default function SignInPage() {
       setErrorMessage(state?.validationError);
     }
   }, [state]);
+
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  }, [user]);
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center mt-24">

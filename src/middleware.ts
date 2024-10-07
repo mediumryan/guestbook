@@ -12,7 +12,6 @@ export async function middleware(req: NextRequest) {
         ? process.env.SERVICE_URL_1
         : process.env.SERVICE_URL_2
     }/sign-in`;
-    console.log(redirectLink);
     return NextResponse.redirect(redirectLink);
   }
   return res;
