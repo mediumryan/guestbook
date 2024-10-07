@@ -27,7 +27,7 @@ export default function AddContentForm({
   }, [state]);
 
   return (
-    <form action={formAction}>
+    <form id="add-form" action={formAction}>
       <AddContentHeader />
       <AddContentInputZone userId={userId} userName={userName} />
     </form>

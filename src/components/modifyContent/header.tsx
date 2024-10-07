@@ -1,3 +1,16 @@
+'use client';
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { useState } from 'react';
+
 export default function ModifyContentHeader({
   registered_person_name,
   userName,
@@ -5,6 +18,8 @@ export default function ModifyContentHeader({
   registered_person_name: string | undefined;
   userName: string;
 }) {
+  const [btn, setBtn] = useState('modify');
+
   return (
     <div
       className={`flex items-center my-12 ${
@@ -22,23 +37,73 @@ export default function ModifyContentHeader({
         <span className="text-sm mt-2">{registered_person_name}</span>
       </div>
       <div>
-        <button
-          type="submit"
-          name="btn"
-          value="delete"
-          className="bg-slate-700 text-white px-4 py-2 mx-1 rounded-md hover:opacity-75"
-        >
-          DELETE
-        </button>
-        <button
-          type="submit"
-          name="btn"
-          value="modify"
-          className="bg-slate-700 text-white px-4 py-2 mx-1 rounded-md hover:opacity-75"
-        >
-          SUBMIT
-        </button>
+        {/* delete button */}
+        <Dialog>
+          <DialogTrigger>
+            <button
+              className="bg-slate-700 text-white px-4 py-2 rounded-md mr-3 hover:opacity-75"
+              type="button"
+            >
+              DELETE
+            </button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+            </DialogHeader>
+            <DialogFooter>
+              <button
+                type="submit"
+                onClick={() => {
+                  setBtn('delete');
+                }}
+                className="bg-slate-700 text-white px-4 py-2 mx-1 rounded-md hover:opacity-75"
+              >
+                DELETE
+              </button>
+              <DialogClose>
+                <button className="bg-slate-700 text-white px-4 py-2 rounded-md hover:opacity-75">
+                  No
+                </button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        {/* submit button */}
+        <Dialog>
+          <DialogTrigger>
+            <button
+              className="bg-slate-700 text-white px-4 py-2 rounded-md hover:opacity-75"
+              type="button"
+            >
+              SUBMIT
+            </button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+            </DialogHeader>
+            <DialogFooter>
+              <button
+                form="modify-form"
+                type="submit"
+                onClick={() => {
+                  setBtn('modify');
+                }}
+                className="bg-slate-700 text-white px-4 py-2 mx-1 rounded-md hover:opacity-75"
+              >
+                SUBMIT
+              </button>
+              <DialogClose>
+                <button className="bg-slate-700 text-white px-4 py-2 rounded-md hover:opacity-75">
+                  No
+                </button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
+      <input type="hidden" name="btn" value={btn} />
     </div>
   );
 }

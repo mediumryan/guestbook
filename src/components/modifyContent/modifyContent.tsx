@@ -35,7 +35,7 @@ export default function ModifyContent({
   }, [state]);
 
   return (
-    <form action={formAction}>
+    <form id="modify-form" action={formAction}>
       <ModifyContentHeader
         registered_person_name={content?.registered_person_name}
         userName={userName}
