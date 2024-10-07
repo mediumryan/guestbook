@@ -1,35 +1,44 @@
 'use client';
-import { useEffect } from 'react';
-import AddContentHeader from './header';
+// hooks
+import { useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
-import AddContentInputZone from './inputzone';
-import { submitContentAction } from '@/actions/submitContentAction';
 import { useRouter } from 'next/navigation';
+// components
+import AddContentHeader from './header';
+import AddContentInputZone from './inputzone';
+// actions
+import { submitContentAction } from '@/actions/submitContentAction';
+// types
+import { UserType } from '@/type/types';
 
 export default function AddContentForm({
-  userId,
-  userName,
+  user,
 }: {
-  userId: string;
-  userName: string;
+  user: UserType | undefined;
 }) {
   const [state, formAction] = useFormState(submitContentAction, {
     message: null,
   });
+
   const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState<any>(null);
 
   useEffect(() => {
     if (state?.ok) {
+      setErrorMessage(null);
       alert(state?.message);
       router.push('/');
       router.refresh();
+    } else if (state?.validationError) {
+      setErrorMessage(state?.validationError);
     }
   }, [state]);
 
   return (
-    <form id="add-form" action={formAction}>
+    <form action={formAction}>
       <AddContentHeader />
-      <AddContentInputZone userId={userId} userName={userName} />
+      <AddContentInputZone user={user} errorMessage={errorMessage} />
     </form>
   );
 }

@@ -3,6 +3,12 @@
 import { ContentType } from '@/type/types';
 import { dbConnect } from '@/utils/dbConnect';
 import moment from 'moment';
+import { z, ZodError } from 'zod';
+
+const submitContentSchema = z.object({
+  title: z.string().min(1, { message: 'Title is required' }),
+  content: z.string().min(1, { message: 'Content is required' }),
+});
 
 export async function submitContentAction(
   previousState: any,
@@ -13,9 +19,15 @@ export async function submitContentAction(
   const title = formData.get('title') as string;
   const content = formData.get('content') as string;
   const userId = formData.get('userId') as string;
-  const userName = formData.get('userName') as string;
+
+  const dataForValidate = {
+    title: title,
+    content: content,
+  };
 
   try {
+    submitContentSchema.parse(dataForValidate);
+
     const connection = await dbConnect();
 
     const [rows] = await connection.execute(
@@ -25,14 +37,8 @@ export async function submitContentAction(
     const userList = Array.isArray(rows) ? (rows as ContentType[]) : [];
     const user = userList[0];
     await connection.execute(
-      'INSERT INTO content (title, content, registered_date, registered_person, registered_person_name) VALUES (?, ?, ?, ?, ?)',
-      [
-        title,
-        content,
-        moment().format('YYYY-MM-DD HH:mm:ss'),
-        user.id,
-        userName,
-      ]
+      'INSERT INTO content (title, content, registered_date, registered_person) VALUES (?, ?, ?, ?)',
+      [title, content, moment().format('YYYY-MM-DD HH:mm:ss'), userId]
     );
     connection.end();
 
@@ -41,6 +47,19 @@ export async function submitContentAction(
       message: 'Submitted',
     };
   } catch (err: any) {
-    console.error(err.message || 'error!');
+    if (err instanceof ZodError) {
+      return {
+        data: null,
+        error: null,
+        validationError: err.format(),
+      };
+    } else {
+      // Other errors
+      console.error('server error:', err);
+      return {
+        status: 'error',
+        message: err.message,
+      };
+    }
   }
 }

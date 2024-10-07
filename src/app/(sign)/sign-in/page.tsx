@@ -1,28 +1,33 @@
 'use client';
 
-import { signInAction } from '@/actions/signInAction';
+// hooks
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+// types
+import { UserType } from '@/type/types';
+// actions
+import { signInAction } from '@/actions/signInAction';
 
 export default function SignInPage() {
   const [state, formAction] = useFormState(signInAction, { message: null });
   const router = useRouter();
 
+  const [errorMessage, setErrorMessage] = useState<any>(null);
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
 
-  async function getUserName(userId: string, name: string) {
+  async function getUser(user: UserType) {
     const res = await fetch('/api/getUserInfo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userId: userId, name: name }),
+      body: JSON.stringify({ user }),
     });
     if (res.ok) {
-      alert('Sign In');
+      alert(`Welcome, ${user.user_id}!`);
       router.push('/');
       router.refresh();
     }
@@ -30,9 +35,11 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (state?.ok) {
-      getUserName(state?.userId, state?.userName);
+      getUser(state?.user);
     } else if (!state?.ok && state?.message) {
       alert(state?.message);
+    } else if (state?.validationError) {
+      setErrorMessage(state?.validationError);
     }
   }, [state]);
 
@@ -42,31 +49,49 @@ export default function SignInPage() {
       <form action={formAction} className="w-[320px] grid grid-rows-3 gap-2">
         <div className="grid grid-cols-6">
           <label className="col-span-1 text-left p-2">ID</label>
-          <input
-            className="col-span-5 p-2 border rounded-sm"
-            type="text"
-            placeholder="Enter your ID"
-            value={id}
-            onChange={(e) => {
-              setId(e.target.value);
-            }}
-            name="id"
-          />
+
+          <div className="col-span-5 flex flex-col">
+            <input
+              className="p-2 border rounded-sm"
+              type="text"
+              placeholder="Enter your ID"
+              value={id}
+              onChange={(e) => {
+                setId(e.target.value);
+              }}
+              name="id"
+            />
+            {errorMessage?.id && (
+              <p className="text-red-500 text-sm mt-1">
+                {errorMessage?.id._errors[0]}
+              </p>
+            )}
+          </div>
         </div>
         <div className="grid grid-cols-6">
           <label className="col-span-1 text-left p-2">PW</label>
-          <input
-            className="col-span-5 p-2 border rounded-sm"
-            type="password"
-            placeholder="Enter your Password"
-            value={pw}
-            onChange={(e) => {
-              setPw(e.target.value);
-            }}
-            name="pw"
-          />
+          <div className="col-span-5 flex flex-col">
+            <input
+              className="col-span-5 p-2 border rounded-sm"
+              type="password"
+              placeholder="Enter your Password"
+              value={pw}
+              onChange={(e) => {
+                setPw(e.target.value);
+              }}
+              name="pw"
+            />
+            {errorMessage?.pw && (
+              <p className="text-red-500 text-sm">
+                {errorMessage?.pw._errors[0]}
+              </p>
+            )}
+          </div>
         </div>
-        <button className="w-full bg-black text-white py-2" type="submit">
+        <button
+          className="w-full bg-black text-white py-1 h-12 rounded-sm"
+          type="submit"
+        >
           Login
         </button>
         <div className="flex justify-between items-center">

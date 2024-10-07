@@ -4,8 +4,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST() {
   const cookieStore = cookies();
-  cookieStore.delete('userId');
-  cookieStore.delete('userName');
+  cookieStore.delete('user');
   const response = NextResponse.json({ message: 'Cookies deleted' });
   revalidatePath('/login');
   return response;

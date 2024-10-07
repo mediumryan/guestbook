@@ -1,13 +1,12 @@
 'use client';
 
-import { ContentType } from '@/type/types';
+import { ContentType, UserType } from '@/type/types';
 import moment from 'moment';
 
 export default function ContentInputZone({
   content,
 }: {
-  userId: string;
-  userName: string;
+  user: UserType | undefined;
   content: ContentType | undefined;
 }) {
   return (
@@ -26,7 +25,9 @@ export default function ContentInputZone({
         readOnly
       />
       <div className="flex justify-end">
-        <span>{moment(content?.registered_date).format('YYYY-MM-DD')}</span>
+        <span>
+          {moment(content?.registered_date).format('YYYY-MM-DD HH:mm:ss')}
+        </span>
       </div>
     </div>
   );

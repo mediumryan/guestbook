@@ -3,11 +3,6 @@
 import { dbConnect } from '@/utils/dbConnect';
 import { z, ZodError } from 'zod';
 
-const signInSchema = z.object({
-  id: z.string().min(1, { message: 'ID is required' }),
-  pw: z.string().min(1, { message: 'PW is required' }),
-});
-
 type UserType = {
   id: number;
   name: string;
@@ -15,50 +10,52 @@ type UserType = {
   password: string;
 };
 
-export async function signInAction(
+const findPwSchema = z.object({
+  name: z.string().min(1, { message: 'Name is required' }),
+  id: z.string().min(1, { message: 'ID is required' }),
+});
+
+export async function findPwAction(
   previousState: any,
   formData: FormData
 ): Promise<any> {
   previousState = null;
 
+  const name = formData.get('name') as string;
   const id = formData.get('id') as string;
-  const pw = formData.get('pw') as string;
 
   const dataForValidate = {
+    name: name,
     id: id,
-    pw: pw,
   };
 
   const connection = await dbConnect();
   const [rows] = await connection.execute(
-    'SELECT * FROM user WHERE user_id = ?',
-    [id]
-  ); // id로 유저 검색
-  connection.end();
+    'SELECT * FROM user WHERE user_id = ? AND name = ?',
+    [id, name]
+  );
   const userList = Array.isArray(rows) ? (rows as UserType[]) : [];
 
   try {
-    signInSchema.parse(dataForValidate);
-
-    if (userList.length === 0) {
-      return {
-        ok: false,
-        message: 'User not Found',
-      };
-    }
+    findPwSchema.parse(dataForValidate);
 
     const user = userList[0];
 
-    // 입력한 비밀번호와 DB의 비밀번호를 직접 비교
-    if (user.password === pw) {
-      return {
-        ok: true,
-        user: user,
-      };
-    } else {
+    if (!user) {
       return {
         ok: false,
-        message: 'Invalid Password',
+        message: 'Unregistered user.',
+      };
+    } else {
+      const [rows] = await connection.execute(
+        'SELECT * FROM user WHERE user_id = ? AND name = ?',
+        [id, name]
+      );
+      const userList = Array.isArray(rows) ? (rows as UserType[]) : [];
+      const user = userList[0];
+      return {
+        ok: true,
+        data: user.password,
       };
     }
   } catch (err: any) {

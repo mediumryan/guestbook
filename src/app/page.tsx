@@ -6,7 +6,9 @@ import Link from 'next/link';
 
 async function getContent() {
   const connection = await dbConnect();
-  const [rows] = await connection.execute('SELECT * FROM content');
+  const [rows] = await connection.execute(
+    'SELECT * FROM content ORDER BY registered_date DESC'
+  );
   connection.end();
   const contentList = Array.isArray(rows) ? rows : [];
   return contentList;

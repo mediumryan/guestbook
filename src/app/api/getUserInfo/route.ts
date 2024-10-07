@@ -1,22 +1,18 @@
-import { cookies } from 'next/headers';
-
 export async function POST(req: Request) {
-  const { userId, name } = await req.json();
+  const { user } = await req.json();
 
-  const cookieStore = cookies();
-  cookieStore.set('userId', userId);
-  cookieStore.set('userName', name);
+  if (user) {
+    const userData = {
+      id: user.id,
+      name: user.name,
+      user_id: user.user_id,
+    };
 
-  const id = cookieStore.get('userId');
-  const userName = cookieStore.get('userName');
-
-  if (id && userName) {
     return new Response('Cookie Setting', {
       status: 200,
       headers: {
         'Set-Cookie': [
-          `userId=${id.value}; Path=/; HttpOnly`,
-          `userName=${userName.value}; Path=/; HttpOnly`,
+          `user=${JSON.stringify(userData)}; Path=/; HttpOnly`,
         ].join(', '),
       },
     });

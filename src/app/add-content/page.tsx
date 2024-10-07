@@ -1,15 +1,15 @@
 import AddContentForm from '@/components/addContent/form';
+import { UserType } from '@/type/types';
 import { cookies } from 'next/headers';
-import React from 'react';
 
 export default function AddContentPage() {
   const cookieStore = cookies();
-  const userId = cookieStore.get('userId')?.value || '';
-  const userName = cookieStore.get('userName')?.value || '';
-
+  const user = cookieStore.get('user')
+    ? (JSON.parse(cookieStore.get('user')?.value as string) as UserType)
+    : undefined;
   return (
     <div className="flex flex-col w-3/4 mx-auto mt-12">
-      <AddContentForm userId={userId} userName={userName} />
+      <AddContentForm user={user} />
     </div>
   );
 }

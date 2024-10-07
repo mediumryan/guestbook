@@ -3,6 +3,12 @@
 import { ContentType } from '@/type/types';
 import { dbConnect } from '@/utils/dbConnect';
 import moment from 'moment';
+import { z, ZodError } from 'zod';
+
+const modifyContentSchema = z.object({
+  title: z.string().min(1, { message: 'Title is required' }),
+  content: z.string().min(1, { message: 'Content is required' }),
+});
 
 export async function modifyContentAction(
   previousState: any,
@@ -14,13 +20,27 @@ export async function modifyContentAction(
   const title = formData.get('title') as string;
   const content = formData.get('content') as string;
   const userId = formData.get('userId') as string;
-  const userName = formData.get('userName') as string;
   const contentId = formData.get('contentId') as string;
 
-  console.log(btn);
+  const dataForValidate = {
+    title: title,
+    content: content,
+  };
+
+  const connection = await dbConnect();
+
+  if (btn === 'delete') {
+    await connection.execute('DELETE FROM content WHERE id = ?', [contentId]);
+    connection.end();
+
+    return {
+      ok: true,
+      message: 'Content deleted successfully',
+    };
+  }
 
   try {
-    const connection = await dbConnect();
+    modifyContentSchema.parse(dataForValidate);
 
     const [rows] = await connection.execute(
       'SELECT * FROM content WHERE id = ?',
@@ -39,13 +59,12 @@ export async function modifyContentAction(
       }
 
       await connection.execute(
-        'UPDATE content SET title = ?, content = ?, registered_date = ?, registered_person = ?, registered_person_name = ? WHERE id = ?',
+        'UPDATE content SET title = ?, content = ?, registered_date = ?, registered_person = ? WHERE id = ?',
         [
           title,
           content,
           moment().format('YYYY-MM-DD HH:mm:ss'),
           userId,
-          userName,
           contentId,
         ]
       );
@@ -55,20 +74,21 @@ export async function modifyContentAction(
         ok: true,
         message: 'Content updated successfully',
       };
-    } else if (btn === 'delete') {
-      await connection.execute('DELETE FROM content WHERE id = ?', [contentId]);
-      connection.end();
-
-      return {
-        ok: true,
-        message: 'Content deleted successfully',
-      };
     }
   } catch (err: any) {
-    console.error(err.message || 'error!');
-    return {
-      ok: false,
-      message: 'Error updating content',
-    };
+    if (err instanceof ZodError) {
+      return {
+        data: null,
+        error: null,
+        validationError: err.format(),
+      };
+    } else {
+      // Other errors
+      console.error('server error:', err);
+      return {
+        status: 'error',
+        message: err.message,
+      };
+    }
   }
 }

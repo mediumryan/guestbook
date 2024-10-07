@@ -1,29 +1,44 @@
 'use client';
 
+import { UserType } from '@/type/types';
+
 export default function AddContentInputZone({
-  userId,
-  userName,
+  user,
+  errorMessage,
 }: {
-  userId: string;
-  userName: string;
+  user: UserType | undefined;
+  errorMessage: any;
 }) {
   return (
-    <>
-      <label className="text-lg">Title</label>
+    <div>
+      <div className="flex items-center">
+        <label className="text-lg mr-12">Title</label>
+        {errorMessage?.title && (
+          <p className="text-red-500 text-sm">
+            {errorMessage?.title._errors[0]}
+          </p>
+        )}
+      </div>
       <input
         type="text"
         className="bg-slate-100 w-full mb-4 p-4"
         placeholder="Enter any title"
         name="title"
       />
-      <label className="text-lg">Content</label>
+      <div className="flex items-center">
+        <label className="text-lg mr-12">Content</label>
+        {errorMessage?.content && (
+          <p className="text-red-500 text-sm">
+            {errorMessage?.content._errors[0]}
+          </p>
+        )}
+      </div>
       <textarea
         className="w-full min-h-[25vh] bg-slate-100 rounded-md p-4"
         placeholder="Enter any content"
         name="content"
       />
-      <input type="hidden" value={userId} name="userId" />
-      <input type="hidden" value={userName} name="userName" />
-    </>
+      <input type="hidden" value={user?.id} name="userId" />
+    </div>
   );
 }

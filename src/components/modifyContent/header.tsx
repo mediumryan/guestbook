@@ -9,21 +9,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { ContentType, UserType } from '@/type/types';
 import { useState } from 'react';
 
 export default function ModifyContentHeader({
-  registered_person_name,
-  userName,
+  content,
+  user,
 }: {
-  registered_person_name: string | undefined;
-  userName: string;
+  content: ContentType | undefined;
+  user: UserType | undefined;
 }) {
   const [btn, setBtn] = useState('modify');
 
   return (
     <div
       className={`flex items-center my-12 ${
-        registered_person_name === userName
+        content?.registered_person === user?.id
           ? 'justify-between'
           : 'justify-start'
       }`}
@@ -31,10 +32,10 @@ export default function ModifyContentHeader({
       <div className="col-span-2 flex flex-col items-center">
         <div className="bg-slate-800 rounded-full w-[75px] h-[75px] flex justify-center items-center">
           <p className="text-white font-bold text-2xl opacity-40">
-            {registered_person_name?.slice(0, 1).toUpperCase()}
+            {content?.user_id?.slice(0, 1).toUpperCase()}
           </p>
         </div>
-        <span className="text-sm mt-2">{registered_person_name}</span>
+        <span className="text-sm mt-2">{content?.user_id}</span>
       </div>
       <div>
         {/* delete button */}
@@ -53,6 +54,7 @@ export default function ModifyContentHeader({
             </DialogHeader>
             <DialogFooter>
               <button
+                form="modify-form"
                 type="submit"
                 onClick={() => {
                   setBtn('delete');

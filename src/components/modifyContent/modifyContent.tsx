@@ -1,34 +1,36 @@
 'use client';
 
-import { ContentType } from '@/type/types';
+import { ContentType, UserType } from '@/type/types';
 import ModifyContentHeader from './header';
 import ModifyContentInputZone from './inputZone';
 import { useFormState } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { modifyContentAction } from '@/actions/modifyContentAction';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ModifyContent({
   id,
   content,
-  userId,
-  userName,
+  user,
 }: {
   id: string;
   content: ContentType | undefined;
-  userId: string;
-  userName: string;
+  user: UserType | undefined;
 }) {
   const [state, formAction] = useFormState(modifyContentAction, {
     message: null,
   });
   const router = useRouter();
 
+  const [errorMessage, setErrorMessage] = useState<any>(null);
+
   useEffect(() => {
     if (state?.ok) {
       alert(state?.message);
       router.push('/');
       router.refresh();
+    } else if (state?.validationError) {
+      setErrorMessage(state?.validationError);
     } else if (!state?.ok && state?.message) {
       alert(state?.message);
     }
@@ -36,15 +38,11 @@ export default function ModifyContent({
 
   return (
     <form id="modify-form" action={formAction}>
-      <ModifyContentHeader
-        registered_person_name={content?.registered_person_name}
-        userName={userName}
-      />
+      <ModifyContentHeader content={content} user={user} />
       <ModifyContentInputZone
-        contentId={id}
-        userId={userId}
-        userName={userName}
         content={content}
+        user={user}
+        errorMessage={errorMessage}
       />
     </form>
   );

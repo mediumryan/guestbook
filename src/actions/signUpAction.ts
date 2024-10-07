@@ -2,6 +2,24 @@
 
 import { UserType } from '@/type/types';
 import { dbConnect } from '@/utils/dbConnect';
+import { z, ZodError } from 'zod';
+
+const signUpSchema = z
+  .object({
+    name: z.string().min(1, { message: 'Name is required' }),
+    id: z.string().min(1, { message: 'ID is required' }),
+    pw: z.string().min(1, { message: 'PW is required' }),
+    pwCheck: z.string().min(1, { message: 'Check PW is required' }),
+  })
+  .refine(
+    (data) => {
+      if (data.pw !== data.pwCheck) {
+        return false;
+      }
+      return true;
+    },
+    { message: 'PW and Check PW are not the same.', path: ['pwCheck'] }
+  );
 
 export async function signUpAction(
   previousState: any,
@@ -14,6 +32,13 @@ export async function signUpAction(
   const pw = formData.get('pw') as string;
   const pwCheck = formData.get('pwCheck') as string;
 
+  const dataForValidate = {
+    name: name,
+    id: id,
+    pw: pw,
+    pwCheck: pwCheck,
+  };
+
   const connection = await dbConnect();
   const [rows] = await connection.execute(
     'SELECT * FROM user WHERE user_id = ?',
@@ -22,11 +47,12 @@ export async function signUpAction(
   const userList = Array.isArray(rows) ? (rows as UserType[]) : [];
 
   try {
+    signUpSchema.parse(dataForValidate);
+
     const user = userList[0];
 
     // 아이디 중복 확인
     if (userList.length !== 0) {
-      console.log('This ID is already been');
       return {
         ok: false,
         message: 'This ID is already been',
@@ -35,7 +61,6 @@ export async function signUpAction(
 
     // 비밀번호 체크
     if (pw !== pwCheck) {
-      console.log('The values of PW and Check PW do not match.');
       return {
         ok: false,
         message: 'The values of PW and Check PW do not match.',
@@ -56,13 +81,23 @@ export async function signUpAction(
       connection.end();
       return {
         ok: true,
-        userId: user.user_id,
-        userName: user.name,
+        user: user,
       };
     }
-  } catch (error) {
-    console.error(error);
-    // 에러 처리 로직
+  } catch (err: any) {
+    if (err instanceof ZodError) {
+      return {
+        data: null,
+        error: null,
+        validationError: err.format(),
+      };
+    } else {
+      // Other errors
+      console.error('server error:', err);
+      return {
+        status: 'error',
+        message: err.message,
+      };
+    }
   }
-  console.log(id, pw);
 }

@@ -1,10 +1,11 @@
 'use client';
 
+import { UserType } from '@/type/types';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-export default function Buttons({ userName }: { userName: string }) {
+export default function Buttons({ user }: { user: UserType | undefined }) {
   const router = useRouter();
 
   async function signOut() {
@@ -18,7 +19,7 @@ export default function Buttons({ userName }: { userName: string }) {
 
   return (
     <ul className="flex">
-      {userName ? (
+      {user ? (
         <li>
           <button
             className="bg-slate-700 py-1 px-2 mx-1 rounded-md hover:opacity-75"
