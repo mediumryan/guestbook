@@ -24,14 +24,14 @@ export default function FindPwPage() {
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center mt-24">
-      <h2 className="text-xl font-bold italic mb-8">Find Password</h2>
+      <h2 className="text-2xl font-bold italic mb-8">Find Password</h2>
       {pw ? (
         <div className="flex items-center justify-center border p-2 rounded-md">
           <p className="mr-4">Your Password is</p>
           <p className="outline-none font-bold text-lg">「{pw}」</p>
         </div>
       ) : (
-        <form action={formAction} className="w-[400px] grid grid-rows-3 gap-2">
+        <form action={formAction} className="w-[320px] grid grid-rows-3 gap-2">
           <div className="grid grid-cols-6">
             <label className="col-span-2 text-left p-2">
               Name

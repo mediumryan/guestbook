@@ -1,7 +1,11 @@
+// hooks
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+// icons
 import { BiHome } from 'react-icons/bi';
+// components
 import Buttons from './buttons';
+// types
 import { UserType } from '@/type/types';
 
 export default function Navbar() {
@@ -11,7 +15,7 @@ export default function Navbar() {
     : undefined;
 
   return (
-    <nav className="flex justify-between items-center p-4 mt-8 bg-black text-white w-3/5 mx-auto rounded-md">
+    <nav className="flex justify-between items-center p-4 mt-8 bg-black text-white md:w-3/5 mx-auto rounded-md">
       <div className="flex items-center">
         <Link href="/">
           <BiHome className="w-8 h-8 mr-4 hover:text-slate-500 duration-300" />

@@ -20,20 +20,26 @@ export default async function ContentItem({ data }: { data: ContentType }) {
   return (
     <div className="grid grid-cols-12 bg-white text-black p-4 m-2 rounded-md items-start">
       {/* content left */}
-      <div className="col-span-2 flex flex-col items-center">
-        <div className="bg-slate-800 rounded-full w-[75px] h-[75px] flex justify-center items-center">
-          <p className="text-white font-bold text-2xl opacity-40">
+      <div className="col-span-3 md:col-span-2 flex flex-col items-center mr-4">
+        <div className="bg-slate-800 rounded-full w-[30px] h-[30px] md:w-[75px] md:h-[75px] flex justify-center items-center">
+          <p className="text-white font-bold md:text-2xl opacity-40">
             {userId[0].user_id.slice(0, 1).toUpperCase()}
           </p>
         </div>
-        <span className="text-sm mt-2">{userId[0].user_id}</span>
+        <span className="text-xs md:text-sm mt-2 truncate">
+          {userId[0].user_id}
+        </span>
       </div>
       {/* content right */}
-      <div className="col-span-10 flex flex-col">
+      <div className="col-span-9 md:col-span-10 flex flex-col">
         {/* title and date */}
         <div className="flex justify-between items-center">
-          <h4 className="font-bold text-lg">{data.title}</h4>
-          <span className={`text-xs ${isToday && 'text-sky-500 font-bold'}`}>
+          <h4 className="w-3/5 font-bold text-lg truncate">{data.title}</h4>
+          <span
+            className={`w-2/5 text-xs text-right ${
+              isToday && 'text-sky-500 font-bold'
+            }`}
+          >
             {moment(data.registered_date).format('YYYY-MM-DD')}
           </span>
         </div>

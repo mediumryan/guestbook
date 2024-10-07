@@ -1,10 +1,15 @@
 'use client';
 
-import { signUpAction } from '@/actions/signUpAction';
-import { UserType } from '@/type/types';
+// hooks
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
+// actions
+import { signUpAction } from '@/actions/signUpAction';
+// components
+import EssentialMark from '@/components/common/essentialMark';
+// types
+import { UserType } from '@/type/types';
 
 export default function SignUpPage() {
   const [state, formAction] = useFormState(signUpAction, { message: null });
@@ -39,8 +44,8 @@ export default function SignUpPage() {
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center mt-24">
-      <h2 className="text-xl font-bold italic mb-8">Sign Up</h2>
-      <form action={formAction} className="w-[400px] grid grid-rows-3 gap-2">
+      <h2 className="text-2xl font-bold italic mb-8">Sign Up</h2>
+      <form action={formAction} className="w-[320px] grid grid-rows-3 gap-2">
         <div className="grid grid-cols-6">
           <label className="col-span-2 text-left p-2">
             Name
@@ -123,8 +128,4 @@ export default function SignUpPage() {
       </form>
     </div>
   );
-}
-
-function EssentialMark() {
-  return <span className="text-red-500">*</span>;
 }

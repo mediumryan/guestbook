@@ -1,6 +1,7 @@
 'use client';
 
 import { UserType } from '@/type/types';
+import EssentialMark from '../common/essentialMark';
 
 export default function AddContentInputZone({
   user,
@@ -12,7 +13,10 @@ export default function AddContentInputZone({
   return (
     <div>
       <div className="flex items-center">
-        <label className="text-lg mr-12">Title</label>
+        <label className="text-lg mr-12">
+          Title
+          <EssentialMark />
+        </label>
         {errorMessage?.title && (
           <p className="text-red-500 text-sm">
             {errorMessage?.title._errors[0]}
@@ -26,7 +30,10 @@ export default function AddContentInputZone({
         name="title"
       />
       <div className="flex items-center">
-        <label className="text-lg mr-12">Content</label>
+        <label className="text-lg mr-12">
+          Content
+          <EssentialMark />
+        </label>
         {errorMessage?.content && (
           <p className="text-red-500 text-sm">
             {errorMessage?.content._errors[0]}

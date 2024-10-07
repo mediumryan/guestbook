@@ -18,7 +18,7 @@ export default async function Home() {
   const contents = (await getContent()) as ContentType[];
 
   return (
-    <div className="w-3/5 mx-auto">
+    <div className="md:w-3/5 mx-auto">
       {/* main page header */}
       <MainHeader />
       {/* content list */}

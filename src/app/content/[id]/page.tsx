@@ -29,7 +29,7 @@ export default async function ContentPage({
   const content = contents.find((a) => a.id === Number(params.id));
 
   return (
-    <div className="flex flex-col w-3/4 mx-auto mt-12">
+    <div className="flex flex-col md:w-3/4 mx-auto mt-12">
       <Content content={content} user={user} />
     </div>
   );

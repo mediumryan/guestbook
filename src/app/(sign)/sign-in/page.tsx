@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { UserType } from '@/type/types';
 // actions
 import { signInAction } from '@/actions/signInAction';
+import EssentialMark from '@/components/common/essentialMark';
 
 export default function SignInPage() {
   const [state, formAction] = useFormState(signInAction, { message: null });
@@ -48,7 +49,10 @@ export default function SignInPage() {
       <h2 className="text-2xl font-bold italic mb-8">Sign In</h2>
       <form action={formAction} className="w-[320px] grid grid-rows-3 gap-2">
         <div className="grid grid-cols-6">
-          <label className="col-span-1 text-left p-2">ID</label>
+          <label className="col-span-1 text-left p-2">
+            ID
+            <EssentialMark />
+          </label>
 
           <div className="col-span-5 flex flex-col">
             <input
@@ -69,7 +73,10 @@ export default function SignInPage() {
           </div>
         </div>
         <div className="grid grid-cols-6">
-          <label className="col-span-1 text-left p-2">PW</label>
+          <label className="col-span-1 text-left p-2">
+            PW
+            <EssentialMark />
+          </label>
           <div className="col-span-5 flex flex-col">
             <input
               className="col-span-5 p-2 border rounded-sm"

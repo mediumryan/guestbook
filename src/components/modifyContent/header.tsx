@@ -30,7 +30,7 @@ export default function ModifyContentHeader({
       }`}
     >
       <div className="col-span-2 flex flex-col items-center">
-        <div className="bg-slate-800 rounded-full w-[75px] h-[75px] flex justify-center items-center">
+        <div className="bg-slate-800 rounded-full w-[50px] md:w-[75px] h-[50px] md:h-[75px] flex justify-center items-center">
           <p className="text-white font-bold text-2xl opacity-40">
             {content?.user_id?.slice(0, 1).toUpperCase()}
           </p>
@@ -42,7 +42,7 @@ export default function ModifyContentHeader({
         <Dialog>
           <DialogTrigger>
             <button
-              className="bg-slate-700 text-white px-4 py-2 rounded-md mr-3 hover:opacity-75"
+              className="bg-slate-700 text-white px-2 md:px-4 py-1 md:py-2 rounded-md mr-3 hover:opacity-75"
               type="button"
             >
               DELETE
@@ -59,12 +59,12 @@ export default function ModifyContentHeader({
                 onClick={() => {
                   setBtn('delete');
                 }}
-                className="bg-slate-700 text-white px-4 py-2 mx-1 rounded-md hover:opacity-75"
+                className="bg-slate-700 text-white px-2 md:px-4 py-1 md:py-2 rounded-md mr-3 hover:opacity-75"
               >
                 DELETE
               </button>
               <DialogClose>
-                <button className="bg-slate-700 text-white px-4 py-2 rounded-md hover:opacity-75">
+                <button className="bg-slate-700 text-white px-2 md:px-4 py-1 md:py-2 rounded-md mr-3 hover:opacity-75">
                   No
                 </button>
               </DialogClose>
@@ -75,7 +75,7 @@ export default function ModifyContentHeader({
         <Dialog>
           <DialogTrigger>
             <button
-              className="bg-slate-700 text-white px-4 py-2 rounded-md hover:opacity-75"
+              className="bg-slate-700 text-white px-2 md:px-4 py-1 md:py-2 rounded-md mr-3 hover:opacity-75"
               type="button"
             >
               SUBMIT
@@ -92,12 +92,12 @@ export default function ModifyContentHeader({
                 onClick={() => {
                   setBtn('modify');
                 }}
-                className="bg-slate-700 text-white px-4 py-2 mx-1 rounded-md hover:opacity-75"
+                className="bg-slate-700 text-white px-2 md:px-4 py-1 md:py-2 rounded-md mr-3 hover:opacity-75"
               >
                 SUBMIT
               </button>
               <DialogClose>
-                <button className="bg-slate-700 text-white px-4 py-2 rounded-md hover:opacity-75">
+                <button className="bg-slate-700 text-white px-2 md:px-4 py-1 md:py-2 rounded-md mr-3 hover:opacity-75">
                   No
                 </button>
               </DialogClose>

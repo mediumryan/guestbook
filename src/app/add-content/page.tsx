@@ -8,7 +8,7 @@ export default function AddContentPage() {
     ? (JSON.parse(cookieStore.get('user')?.value as string) as UserType)
     : undefined;
   return (
-    <div className="flex flex-col w-3/4 mx-auto mt-12">
+    <div className="flex flex-col md:w-3/4 mx-auto mt-12">
       <AddContentForm user={user} />
     </div>
   );
