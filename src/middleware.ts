@@ -7,13 +7,13 @@ export async function middleware(req: NextRequest) {
   const user = req.cookies.get('user')?.value;
 
   if (!user) {
-    return NextResponse.redirect(
-      `${
-        process.env.NODE_ENV === 'production'
-          ? process.env.SERVICE_URL_1
-          : process.env.SERVICE_URL_2
-      }/sign-in`
-    );
+    const redirectLink = `${
+      process.env.NODE_ENV === 'production'
+        ? process.env.SERVICE_URL_1
+        : process.env.SERVICE_URL_2
+    }/sign-in`;
+    console.log(redirectLink);
+    return NextResponse.redirect(redirectLink);
   }
   return res;
 }
